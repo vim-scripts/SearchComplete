@@ -39,7 +39,7 @@ let loaded_search_complete = 1
 "--------------------------------------------------
 " Key mappings
 "-------------------------------------------------- 
-noremap / :call SearchCompleteStart()<CR>/
+nnoremap / :call SearchCompleteStart()<CR>/
 
 
 "--------------------------------------------------
