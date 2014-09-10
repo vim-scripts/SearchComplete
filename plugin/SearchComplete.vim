@@ -54,6 +54,7 @@ function! SearchCompleteStart(dir)
         let s:completecmd = "\<C-P>"
         cnoremap <Tab> <C-C>:call SearchComplete()<CR>?<C-R>s
     endif
+    let s:reg_s = @s
 	cnoremap <silent> <CR> <CR>:call SearchCompleteStop()<CR>
 	cnoremap <silent> <Esc> <C-C>:call SearchCompleteStop()<CR>
 endfunction
@@ -103,5 +104,6 @@ function! SearchCompleteStop()
 	cunmap <Tab>
 	cunmap <CR>
 	cunmap <Esc>
+    let @s = s:reg_s
 endfunction
 
