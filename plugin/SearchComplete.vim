@@ -1,35 +1,35 @@
 " SearchComplete.vim
 " Author: Chris Russell
 " Version: 1.1
-" License: GPL v2.0 
-" 
+" License: GPL v2.0
+"
 " Description:
-" This script defineds functions and key mappings for Tab completion in 
+" This script defineds functions and key mappings for Tab completion in
 " searches.
-" 
+"
 " Help:
-" This script catches the <Tab> character when using the '/' search 
-" command.  Pressing Tab will expand the current partial word to the 
+" This script catches the <Tab> character when using the '/' search
+" command.  Pressing Tab will expand the current partial word to the
 " next matching word starting with the partial word.
-" 
+"
 " If you want to match a tab, use the '\t' pattern.
 "
 " Installation:
 " Simply drop this file into your $HOME/.vim/plugin directory.
-" 
+"
 " Changelog:
 " 2002-11-08 v1.1
 " 	Convert to unix eol
 " 2002-11-05 v1.0
 " 	Initial release
-" 
+"
 " TODO:
-" 
+"
 
 
 "--------------------------------------------------
 " Avoid multiple sourcing
-"-------------------------------------------------- 
+"--------------------------------------------------
 if exists( "loaded_search_complete" )
     finish
 endif
@@ -38,22 +38,29 @@ let loaded_search_complete = 1
 
 "--------------------------------------------------
 " Key mappings
-"-------------------------------------------------- 
-nnoremap / :call SearchCompleteStart()<CR>/
+"--------------------------------------------------
+nnoremap / :call SearchCompleteStart('f')<CR>/
+nnoremap ? :call SearchCompleteStart('b')<CR>?
 
 
 "--------------------------------------------------
 " Set mappings for search complete
-"-------------------------------------------------- 
-function! SearchCompleteStart()
-	cnoremap <Tab> <C-C>:call SearchComplete()<CR>/<C-R>s
+"--------------------------------------------------
+function! SearchCompleteStart(dir)
+    if a:dir == 'f'
+        let s:completecmd = "\<C-N>"
+        cnoremap <Tab> <C-C>:call SearchComplete()<CR>/<C-R>s
+    else
+        let s:completecmd = "\<C-P>"
+        cnoremap <Tab> <C-C>:call SearchComplete()<CR>?<C-R>s
+    endif
 	cnoremap <silent> <CR> <CR>:call SearchCompleteStop()<CR>
 	cnoremap <silent> <Esc> <C-C>:call SearchCompleteStop()<CR>
 endfunction
 
 "--------------------------------------------------
 " Tab completion in / search
-"-------------------------------------------------- 
+"--------------------------------------------------
 function! SearchComplete()
 	" get current cursor position
 	let l:loc = col( "." ) - 1
@@ -65,10 +72,10 @@ function! SearchComplete()
 		" get root search string
 		let l:search = b:searchcomplete
 		" increase number of autocompletes
-		let b:searchcompletedepth = b:searchcompletedepth . "\<C-N>"
+		let b:searchcompletedepth = b:searchcompletedepth . s:completecmd
 	else
 		" one autocomplete
-		let b:searchcompletedepth = "\<C-N>"
+		let b:searchcompletedepth = s:completecmd
 	endif
 	" store origional search parameter
 	let b:searchcomplete = l:search
@@ -91,7 +98,7 @@ endfunction
 
 "--------------------------------------------------
 " Remove search complete mappings
-"-------------------------------------------------- 
+"--------------------------------------------------
 function! SearchCompleteStop()
 	cunmap <Tab>
 	cunmap <CR>
