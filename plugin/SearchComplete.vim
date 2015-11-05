@@ -19,9 +19,9 @@
 "
 " Changelog:
 " 2002-11-08 v1.1
-" 	Convert to unix eol
+"   Convert to unix eol
 " 2002-11-05 v1.0
-" 	Initial release
+"   Initial release
 "
 " TODO:
 "
@@ -55,55 +55,59 @@ function! SearchCompleteStart(dir)
         cnoremap <Tab> <C-C>:call SearchComplete()<CR>?<C-R>s
     endif
     let s:reg_s = @s
-	cnoremap <silent> <CR> <CR>:call SearchCompleteStop()<CR>
-	cnoremap <silent> <Esc> <C-C>:call SearchCompleteStop()<CR>
+    cnoremap <silent> <CR> <CR>:call SearchCompleteStop()<CR>
+    cnoremap <silent> <Esc> <C-C>:call SearchCompleteStop()<CR>
+    " allow Up/Down arrows without breaking
+    cnoremap <silent> <Esc>[A <Esc>[A
+    cnoremap <silent> <Esc>[B <Esc>[B
+
 endfunction
 
 "--------------------------------------------------
 " Tab completion in / search
 "--------------------------------------------------
 function! SearchComplete()
-	" get current cursor position
-	let l:loc = col( "." ) - 1
-	" get partial search and delete
-	let l:search = histget( '/', -1 )
-	call histdel( '/', -1 )
-	" check if new search
-	if l:search == @s
-		" get root search string
-		let l:search = b:searchcomplete
-		" increase number of autocompletes
-		let b:searchcompletedepth = b:searchcompletedepth . s:completecmd
-	else
-		" one autocomplete
-		let b:searchcompletedepth = s:completecmd
-	endif
-	" store origional search parameter
-	let b:searchcomplete = l:search
-	" set paste option to disable indent options
-	let l:paste = &paste
-	setlocal paste
-	" on a temporary line put search string and use autocomplete
-	execute "normal! A\n" . l:search . b:searchcompletedepth
-	" get autocomplete result
-	let @s = getline( line( "." ) )
-	" undo and return to first char
-	execute "normal! u0"
-	" return to cursor position
-	if l:loc > 0
-		execute "normal! ". l:loc . "l"
-	endif
-	" reset paste option
-	let &paste = l:paste
+    " get current cursor position
+    let l:loc = col( "." ) - 1
+    " get partial search and delete
+    let l:search = histget( '/', -1 )
+    call histdel( '/', -1 )
+    " check if new search
+    if l:search == @s
+        " get root search string
+        let l:search = b:searchcomplete
+        " increase number of autocompletes
+        let b:searchcompletedepth = b:searchcompletedepth . s:completecmd
+    else
+        " one autocomplete
+        let b:searchcompletedepth = s:completecmd
+    endif
+    " store origional search parameter
+    let b:searchcomplete = l:search
+    " set paste option to disable indent options
+    let l:paste = &paste
+    setlocal paste
+    " on a temporary line put search string and use autocomplete
+    execute "normal! A\n" . l:search . b:searchcompletedepth
+    " get autocomplete result
+    let @s = getline( line( "." ) )
+    " undo and return to first char
+    execute "normal! u0"
+    " return to cursor position
+    if l:loc > 0
+        execute "normal! ". l:loc . "l"
+    endif
+    " reset paste option
+    let &paste = l:paste
 endfunction
 
 "--------------------------------------------------
 " Remove search complete mappings
 "--------------------------------------------------
 function! SearchCompleteStop()
-	cunmap <Tab>
-	cunmap <CR>
-	cunmap <Esc>
+    cunmap <Tab>
+    cunmap <CR>
+    cunmap <Esc>
     let @s = s:reg_s
 endfunction
 
