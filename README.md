@@ -7,3 +7,9 @@ Call me lazy but I wanted to be able to tab-complete words while typing in a sea
 1. Only bind / in normal mode
 
 2. Also support complete in backward search (?)
+
+
+### emersonrp change:
+
+Explicitly map &lt;Up&gt; and &lt;Down&gt; so they work inside search mode to walk up and
+down the search history.
