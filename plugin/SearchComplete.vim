@@ -18,6 +18,8 @@
 " Simply drop this file into your $HOME/.vim/plugin directory.
 " 
 " Changelog:
+" 2016-09-02 - v1.2 (Jack Mudge <jakykong@theanythingbox.com>)
+"   Fixed so that it works with motion commands
 " 2002-11-08 v1.1
 " 	Convert to unix eol
 " 2002-11-05 v1.0
@@ -39,7 +41,9 @@ let loaded_search_complete = 1
 "--------------------------------------------------
 " Key mappings
 "-------------------------------------------------- 
-noremap / :call SearchCompleteStart()<CR>/
+onoremap / /<C-r>=SearchCompleteStart()<CR>
+nnoremap / :call SearchCompleteStart()<CR>/
+
 
 
 "--------------------------------------------------
@@ -49,6 +53,7 @@ function! SearchCompleteStart()
 	cnoremap <Tab> <C-C>:call SearchComplete()<CR>/<C-R>s
 	cnoremap <silent> <CR> <CR>:call SearchCompleteStop()<CR>
 	cnoremap <silent> <Esc> <C-C>:call SearchCompleteStop()<CR>
+    return '' " Enables expression to use this function for omap
 endfunction
 
 "--------------------------------------------------
